@@ -1,4 +1,3 @@
-
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
@@ -8,9 +7,8 @@ const app = express()
 
 const port= process.env.PORT || 3000;
 
-
 app.use(bodyParser.json())
-//app.use(express.static('public'))
+
 
 app.use(express.static(path.join(__dirname, "/public")))
 
@@ -18,40 +16,39 @@ app.use(bodyParser.urlencoded({
     extended:true
 }))
 
+// Connecting to the database 
 
-mongoose.connect('mongodb+srv://Thierno:ZXDianibrahim42@pucherpoll.gxaqz.mongodb.net/nenefuta3',{useNewUrlParser: true}, {useUnifiedTopology: true});
+//(only for fiverr expert I hired) You can change the /thierno to /[Your name] on the link. That way, the data you send during your test 
+//will be separated from mine in the data base
+
+mongoose.connect('mongodb+srv://thierno-user-01:thierno-user-01@cluster0.9epwp.mongodb.net/thierno',{useNewUrlParser: true}, {useUnifiedTopology: true});
 
 var db=mongoose.connection;
-
 
 db.on('error',() =>console.log("Error in connecting to the database"));
 db.once('open',() => console.log("Connected to database"))
 
 
-
-app.post("/sign_up",(req,res)=> {
+// Get vote for p1 and send  data
+app.post("/voteP1",(req,res)=> {
 
     var email=req.body.email;
     var state=req.body.state;
     var zipcode=req.body.zipcode;
-    var product=req.body.product;
     var price=req.body.price;
     var userprice=req.body.userprice;
-
-
 
     var data= {
         "email": email,
         "state":state,
         "zipcode":zipcode,
-        "product":product,
         "price":price,
         "userprice":userprice
 
 
      }
 
-     db.collection('users').insertOne(data, (err,collection) => {
+     db.collection('p1-data').insertOne(data, (err,collection) => {
         if(err){
             throw err;
         }
@@ -63,14 +60,13 @@ app.post("/sign_up",(req,res)=> {
 
 })
 
+// Get vote for p2 and send data
 
-
-app.post("/sign_up_elec",(req,res)=> {
+app.post("/voteP2",(req,res)=> {
 
     var email=req.body.email;
     var state=req.body.state;
     var zipcode=req.body.zipcode;
-    var product=req.body.product;
     var price=req.body.price;
     var userprice=req.body.userprice;
 
@@ -80,14 +76,11 @@ app.post("/sign_up_elec",(req,res)=> {
         "email": email,
         "state":state,
         "zipcode":zipcode,
-        "product":product,
         "price":price,
         "userprice":userprice
-
-
      }
 
-     db.collection('users_elec').insertOne(data, (err,collection) => {
+     db.collection('p2-data').insertOne(data, (err,collection) => {
         if(err){
             throw err;
         }
@@ -99,18 +92,12 @@ app.post("/sign_up_elec",(req,res)=> {
 
 })
 
-
-
-
-
-
-
-app.post("/sign_up_natGas",(req,res)=> {
+// Get vote for p3 and send data
+app.post("/voteP3",(req,res)=> {
 
     var email=req.body.email;
     var state=req.body.state;
     var zipcode=req.body.zipcode;
-    var product=req.body.product;
     var price=req.body.price;
     var userprice=req.body.userprice;
 
@@ -119,14 +106,13 @@ app.post("/sign_up_natGas",(req,res)=> {
         "email": email,
         "state":state,
         "zipcode":zipcode,
-        "product":product,
         "price":price,
         "userprice":userprice
 
 
      }
 
-     db.collection('users_natGas').insertOne(data, (err,collection) => {
+     db.collection('p3-data').insertOne(data, (err,collection) => {
         if(err){
             throw err;
         }
@@ -137,6 +123,8 @@ app.post("/sign_up_natGas",(req,res)=> {
      return res.redirect("success.html")
 
 })
+
+// Get meeting sign up data
 
 app.post("/sign_up_annual_meating",(req,res)=> {
 
@@ -158,13 +146,6 @@ app.post("/sign_up_annual_meating",(req,res)=> {
      return res.redirect("meet_sign_success.html")
 
 })
-
-
-
-
-
-
-
 
 app.get("/",( req, res)=>{
 
